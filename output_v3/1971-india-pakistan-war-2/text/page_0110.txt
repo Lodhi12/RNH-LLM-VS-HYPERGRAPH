@@ -1,0 +1,44 @@
+110
+    10 Division: 47
+    11 Division: 12, 58-59
+    12 Division: 56-57, 59
+    14 Division: 52-53
+    15 Division: 50
+    17 Division: 26
+    19 Division: 42-43
+    20 Division: 26
+    23 Division: 28, 32
+    25 Division: 44
+    26 Division: 47
+    27 Division: 26
+    39 Division: 44, 47
+    54 Division: 48
+    57 Division: 28, 30-31
+    101 Communications Zone: 20, 30
+    50 Para Brigade: 23, 28
+    51 Para Brigade: 55
+    67 Brigade: 54
+    Special Frontier Force (SFF): 32
+    Ladakh Scouts: 38-39
+Indian Navy: 14, 32, 37, 63-64, 65
+    “Force Alpha”: 23, 63
+Jarpal, Battle (also Barapind/Basantar): 48
+Joint (multi-service) operations: 14-15, 17, 36, 37
+Karachi: 36, 37, 62
+Kargil: 40-41
+Khan, General Agha Mohammed Yahya: 11, 14
+Kilo Sector (India): 57
+Longewala, Battle: 12, 56-57, 62
+Manekshaw, General S. H. F. J.: 11, 23, 32
+Mujibur Rahman, Shiekh: 11
+Mukti Bahini: 11-12, 13, 17-18, 20-21, 23, 26, 28-29, 31, 32, 63, 65
+Niazi, Lt. Gen. A. A. K.: 12, 14, 17-20, 28
+Pakistan Air Force: 14, 17, 36, 55, 56-57, 58, 61-63, 65
+Pakistan Army: 13-14, 65
+    I Corps: 36, 48-49, 59
+    II Corps: 36, 37, 50, 54-55, 59
+    IV Corps: 36, 49, 50-51, 54
+    1 Armored Division: 55
+    6 Armored Division: 48-49
+    7 Division: 36, 37, 43, 55
+    8 Division: 48-49

@@ -1,0 +1,36 @@
+[2026-09-23 20:06:32] Loaded 146 pages from book_metadata.json (book_id=1971-india-pakistan-war-2)
+[2026-09-23 20:06:32] 5 page(s) to process this run
+[2026-09-23 20:06:36] [1/5] page 1: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:06:42] [1/5] page 1: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:06:48] [1/5] page 1: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:06:50] [1/5] page 1: FAILED after retries, logging raw output
+[2026-09-23 20:06:50] [1/5] page 1: 0 claim(s) extracted
+[2026-09-23 20:06:54] [2/5] page 5: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:00] [2/5] page 5: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:06] [2/5] page 5: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:08] [2/5] page 5: FAILED after retries, logging raw output
+[2026-09-23 20:07:08] [2/5] page 5: 0 claim(s) extracted
+[2026-09-23 20:07:12] [3/5] page 6: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:18] [3/5] page 6: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:25] [3/5] page 6: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:27] [3/5] page 6: FAILED after retries, logging raw output
+[2026-09-23 20:07:27] [3/5] page 6: 0 claim(s) extracted
+[2026-09-23 20:07:31] [4/5] page 7: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:37] [4/5] page 7: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:43] [4/5] page 7: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:45] [4/5] page 7: FAILED after retries, logging raw output
+[2026-09-23 20:07:45] [4/5] page 7: 0 claim(s) extracted
+[2026-09-23 20:07:49] [5/5] page 8: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:07:55] [5/5] page 8: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:08:01] [5/5] page 8: Ollama connection error (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); is `ollama serve` running?
+[2026-09-23 20:08:03] [5/5] page 8: FAILED after retries, logging raw output
+[2026-09-23 20:08:03] [5/5] page 8: 0 claim(s) extracted
+[2026-09-23 20:08:03] Done. Total claims across all runs: 0. Outputs in claims_out/ (claims_all.json, claims_all.csv, claims.jsonl)
+[2026-09-23 20:11:32] Loaded 146 pages from book_metadata.json (book_id=1971-india-pakistan-war-2)
+[2026-09-23 20:11:32] 5 page(s) to process this run
+[2026-09-23 20:12:20] [1/5] page 1: 1 claim(s) extracted
+[2026-09-23 20:13:28] [2/5] page 5: 17 claim(s) extracted
+[2026-09-23 20:13:41] [3/5] page 6: 0 claim(s) extracted
+[2026-09-23 20:13:56] [4/5] page 7: 0 claim(s) extracted
+[2026-09-23 20:14:10] [5/5] page 8: 0 claim(s) extracted
+[2026-09-23 20:14:10] Done. Total claims across all runs: 18. Outputs in claims_out/ (claims_all.json, claims_all.csv, claims.jsonl)
