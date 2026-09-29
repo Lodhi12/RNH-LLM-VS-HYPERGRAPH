@@ -1,0 +1,3 @@
+PRESIDENT'S HOUSE 
+
+<div style="text-align: center;"><img src="imgs/img_in_image_box_415_419_4524_2795.jpg" alt="Image" width="86%" /></div>
