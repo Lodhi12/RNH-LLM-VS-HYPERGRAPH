@@ -21,6 +21,12 @@ Research repository for building and evaluating reproducible pipelines that repr
 - [Research Roadmap](#research-roadmap)
 - [Decisions Required From the Supervisor](#decisions-required-from-the-supervisor)
 
+Detailed protocols:
+
+- [Canonical Data Schema Guide](docs/README.md)
+- [Extraction Method and Evaluation Guide](docs/EXTRACTION_METHOD_GUIDE.md)
+- [Review of the Simplified Extraction and Claim Schemas](docs/SCHEMA_PROPOSAL_REVIEW.md)
+
 ## Research Objective
 
 This project studies how Large Language Model (LLM) and hypergraph-based methods can support the analysis of competing historical narratives. The intended comparison is not simply "LLM versus graph." Both approaches must receive records derived from the same books, under the same source-grounding and evaluation rules.
@@ -185,6 +191,8 @@ For every source PDF:
 - Preserve raw output alongside normalized text so normalization is auditable.
 
 The pipeline must be benchmarked on representative native, scanned, mixed-layout, multilingual, footnote-heavy, and image-heavy pages. A visual contact sheet is useful for audit, but manual review of a sample is still required.
+
+See the [Extraction Method and Evaluation Guide](docs/EXTRACTION_METHOD_GUIDE.md) for the prototype evidence, recommended detail level, tool-comparison experiment, metrics, and release gates.
 
 ### 3. Reconstruct document structure
 
