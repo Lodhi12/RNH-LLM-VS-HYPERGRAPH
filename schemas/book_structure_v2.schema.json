@@ -8,7 +8,7 @@
   "properties": {
     "schema": {"const": "historical-book-structure-v2"},
     "book_id": {"type": "string"},
-    "method": {"enum": ["pdf_bookmarks", "none"]},
+    "method": {"enum": ["pdf_bookmarks", "fallback_unstructured_body", "none"]},
     "method_limitations": {"type": "string"},
     "toc": {
       "type": "array",
