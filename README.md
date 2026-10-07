@@ -169,6 +169,7 @@ not automatically semantically approved or historically true.
 
 Detailed protocols:
 
+- [Collaborator Runbook for Linux, WSL, and Windows](docs/COLLABORATOR_RUNBOOK.md)
 - [Master End-to-End Pipeline](docs/MASTER_PIPELINE.md)
 - [Canonical Data Schema Guide](docs/README.md)
 - [Claim Extraction Pipeline](docs/CLAIM_EXTRACTION_PIPELINE.md)

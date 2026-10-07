@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -120,9 +121,7 @@ def test_checked_example_uses_the_bundled_extractor() -> None:
         require_inputs=False,
     )
 
-    assert config.extractor_command == (
-        str(repository_root / ".venv" / "bin" / "rnh-bookpipe"),
-    )
+    assert config.extractor_command == (sys.executable, "-m", "rnh.extraction.cli")
 
 
 def test_openai_requires_explicit_external_api_approval(tmp_path: Path) -> None:

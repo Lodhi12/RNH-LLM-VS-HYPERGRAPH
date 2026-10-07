@@ -919,18 +919,22 @@ Role-bearing incidence records preserve whether an entity was agent, patient, ex
 
 The checked example is `configs/master_pipeline.example.json`. It validates against `schemas/master_pipeline_config.schema.json`.
 
-The extractor is represented as a command array. The default points to the
-console command installed in this repository's virtual environment:
+The bundled extractor is selected automatically. The master runner invokes it
+with the same Python interpreter that is running `rnh-pipeline`, so the default
+works on Linux, macOS, WSL, and native Windows without an OS-specific virtual
+environment path:
 
 ```json
 {
   "extractor": {
-    "command": [
-      ".venv/bin/rnh-bookpipe"
-    ]
+    "output_root": "data/private/books"
   }
 }
 ```
+
+An advanced deployment may add an optional `extractor.command` array to call a
+different compatible extractor. That override must implement the `extract`,
+`verify`, and `validate` commands expected by the orchestrator.
 
 Each book entry contains exactly one of:
 

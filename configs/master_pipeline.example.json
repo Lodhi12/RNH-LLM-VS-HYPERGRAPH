@@ -7,9 +7,6 @@
     "redistribution_allowed": false
   },
   "extractor": {
-    "command": [
-      ".venv/bin/rnh-bookpipe"
-    ],
     "output_root": "data/private/books",
     "ocr_mode": "auto",
     "ocr_language": "eng",

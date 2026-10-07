@@ -45,7 +45,6 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "command",
         "output_root",
         "ocr_mode",
         "ocr_language",
@@ -60,7 +59,7 @@
           "type": "array",
           "minItems": 1,
           "items": {"type": "string", "minLength": 1},
-          "description": "Command prefix used to invoke bookpipe, for example [\"/path/to/python\", \"-m\", \"book_pipeline.cli\"]."
+          "description": "Optional extractor command override. By default the active Python runs the bundled rnh.extraction.cli module."
         },
         "output_root": {
           "type": "string",

@@ -139,10 +139,15 @@ def load_master_config(
     if require_inputs and not workspace.is_dir():
         raise MasterPipelineError(f"Workspace root does not exist: {workspace}")
 
-    extractor_command = _resolve_command(
-        workspace,
-        raw["extractor"]["command"],
-        require_exists=require_inputs,
+    configured_extractor_command = raw["extractor"].get("command")
+    extractor_command = (
+        _resolve_command(
+            workspace,
+            configured_extractor_command,
+            require_exists=require_inputs,
+        )
+        if configured_extractor_command
+        else (sys.executable, "-m", "rnh.extraction.cli")
     )
     extraction_output = _resolve_path(workspace, raw["extractor"]["output_root"])
     claim_output = _resolve_path(workspace, raw["claims"]["output_dir"])
