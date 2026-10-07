@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/historical-book-extraction-v2.schema.json",
+  "title": "Historical Book Extraction v2 Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "schema_version", "book_id", "created_at", "book", "source", "pipeline", "artifacts", "scope"],
+  "properties": {
+    "schema": {"const": "historical-book-extraction-v2"},
+    "schema_version": {"const": "2.0.0"},
+    "book_id": {"type": "string", "pattern": "^book:[a-f0-9]{16}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "book": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "creators", "publication_year", "language", "page_count", "pdf_metadata"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "creators": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "role"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "role": {"type": "string", "enum": ["author", "editor", "translator", "other"]}
+            }
+          }
+        },
+        "publication_year": {"type": ["integer", "null"], "minimum": 1000, "maximum": 2100},
+        "language": {"type": "string", "minLength": 2},
+        "page_count": {"type": "integer", "minimum": 1},
+        "pdf_metadata": {"type": "object"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file_name", "media_type", "size_bytes", "sha256"],
+      "properties": {
+        "file_name": {"type": "string", "minLength": 1},
+        "media_type": {"const": "application/pdf"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "run_id", "text_engine", "text_engine_version", "ocr_engine", "configuration"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "run_id": {"type": "string"},
+        "text_engine": {"type": "string"},
+        "text_engine_version": {"type": ["string", "null"]},
+        "ocr_engine": {"type": "string"},
+        "configuration": {"type": "object"}
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages", "spans", "blocks", "structure", "images", "extraction_summary", "extraction_verification"],
+      "properties": {
+        "pages": {"type": "string"},
+        "spans": {"type": "string"},
+        "blocks": {"type": "string"},
+        "structure": {"type": "string"},
+        "images": {"type": "string"},
+        "extraction_summary": {"type": "string"},
+        "extraction_verification": {"type": "string"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["represents", "does_not_represent"],
+      "properties": {
+        "represents": {"type": "string"},
+        "does_not_represent": {"type": "string"}
+      }
+    }
+  }
+}

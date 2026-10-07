@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/historical-book-page-v2.schema.json",
+  "title": "Historical Book Page v2",
+  "type": "object",
+  "required": ["schema", "book_id", "page_id", "page_number", "page_label", "geometry", "section", "extraction", "text", "counts", "quality_flags"],
+  "properties": {
+    "schema": {"const": "historical-book-page-v2"},
+    "book_id": {"type": "string"},
+    "page_id": {"type": "string"},
+    "page_number": {"type": "integer", "minimum": 1},
+    "page_label": {"type": ["string", "null"]},
+    "geometry": {"type": "object"},
+    "section": {"type": "object"},
+    "extraction": {
+      "type": "object",
+      "required": ["method", "native_engine", "ocr_engine", "ocr_language", "ocr_dpi", "ocr_mean_word_confidence", "error"],
+      "properties": {
+        "method": {"enum": ["native", "ocr", "native_ocr_failed"]},
+        "native_engine": {"type": "string"},
+        "ocr_engine": {"type": ["string", "null"]},
+        "ocr_language": {"type": ["string", "null"]},
+        "ocr_dpi": {"type": ["integer", "null"]},
+        "ocr_mean_word_confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "error": {"type": ["string", "null"]}
+      }
+    },
+    "text": {
+      "type": "object",
+      "required": ["raw", "normalized", "normalization", "sha256"],
+      "properties": {
+        "raw": {"type": "string"},
+        "normalized": {"type": "string"},
+        "normalization": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "counts": {"type": "object"},
+    "quality_flags": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

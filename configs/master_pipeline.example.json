@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "rnh-three-books-pilot",
+  "workspace_root": "..",
+  "data_handling": {
+    "external_api_allowed": false,
+    "redistribution_allowed": false
+  },
+  "extractor": {
+    "command": [
+      ".venv/bin/rnh-bookpipe"
+    ],
+    "output_root": "data/private/books",
+    "ocr_mode": "auto",
+    "ocr_language": "eng",
+    "ocr_dpi": 220,
+    "min_text_chars": 80,
+    "include_blocks": true,
+    "include_images": true,
+    "min_image_bytes": 512
+  },
+  "books": [
+    {
+      "pdf": "/absolute/path/to/book.pdf",
+      "title": "Human-reviewed title",
+      "author": "Human-reviewed author",
+      "publication_year": 1971,
+      "language": "en",
+      "rights_status": "private_research"
+    }
+  ],
+  "claims": {
+    "output_dir": "data/private/claim_runs/master-pilot-v1",
+    "backend": "ollama",
+    "model": "qwen3.5:4b",
+    "condition": "llm_few_shot",
+    "base_url": "http://127.0.0.1:11434",
+    "timeout_seconds": 900,
+    "context_length": 16384,
+    "max_retries": 2,
+    "workers": 1,
+    "sample_size_per_book": 100,
+    "limit_units_per_book": 5
+  }
+}

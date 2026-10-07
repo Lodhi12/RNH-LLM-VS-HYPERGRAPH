@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/historical-book-structure-v2.schema.json",
+  "title": "Historical Book Structure v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "book_id", "method", "method_limitations", "toc", "sections"],
+  "properties": {
+    "schema": {"const": "historical-book-structure-v2"},
+    "book_id": {"type": "string"},
+    "method": {"enum": ["pdf_bookmarks", "none"]},
+    "method_limitations": {"type": "string"},
+    "toc": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["section_id", "toc_index", "level", "title", "page_start", "page_end"],
+        "properties": {
+          "section_id": {"type": "string"},
+          "toc_index": {"type": "integer", "minimum": 1},
+          "level": {"type": "integer", "minimum": 1},
+          "title": {"type": "string", "minLength": 1},
+          "page_start": {"type": "integer", "minimum": 1},
+          "page_end": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "section_id", "section_title", "section_level", "section_path", "part_title",
+          "chapter_title", "section_kind", "claim_eligible", "page_start", "page_end",
+          "page_count", "word_count", "extraction_methods"
+        ],
+        "properties": {
+          "section_id": {"type": "string"},
+          "section_title": {"type": "string"},
+          "section_level": {"type": "integer", "minimum": 0},
+          "section_path": {"type": "array", "items": {"type": "string"}},
+          "part_title": {"type": ["string", "null"]},
+          "chapter_title": {"type": ["string", "null"]},
+          "section_kind": {"type": "string"},
+          "claim_eligible": {"type": "boolean"},
+          "page_start": {"type": "integer", "minimum": 1},
+          "page_end": {"type": "integer", "minimum": 1},
+          "page_count": {"type": "integer", "minimum": 1},
+          "word_count": {"type": "integer", "minimum": 0},
+          "extraction_methods": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

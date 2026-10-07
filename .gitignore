@@ -1,0 +1,21 @@
+.venv/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.env
+
+# Copyrighted/private source material and generated derivatives.
+data/raw/
+data/interim/
+data/processed/
+data/private/
+outputs/
+*.pdf
+configs/*.local.json
+
+# Local model/runtime artifacts.
+models/
+.ollama/
+.ollama-runtime/

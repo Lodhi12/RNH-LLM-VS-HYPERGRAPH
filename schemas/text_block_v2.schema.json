@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/historical-book-text-block-v2.schema.json",
+  "title": "Historical Book Text Block v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "block_id",
+    "book_id",
+    "page_id",
+    "page_number",
+    "reading_order",
+    "bbox",
+    "text",
+    "text_sha256",
+    "extraction_method"
+  ],
+  "properties": {
+    "schema": {"const": "historical-book-text-block-v2"},
+    "block_id": {"type": "string"},
+    "book_id": {"type": "string"},
+    "page_id": {"type": "string"},
+    "page_number": {"type": "integer", "minimum": 1},
+    "reading_order": {"type": "integer", "minimum": 1},
+    "bbox": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"},
+        {"type": "number"},
+        {"type": "number"}
+      ],
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "text": {"type": "string", "minLength": 1},
+    "text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "extraction_method": {"const": "native"}
+  }
+}

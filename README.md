@@ -4,8 +4,154 @@ Research repository for building and evaluating reproducible pipelines that repr
 
 > **Research status:** protocol and infrastructure design. Existing scripts and generated outputs are prototypes, not validated thesis results. The definitions, annotation policy, frame taxonomy, and evaluation design must be approved by the research team and supervisor before corpus-scale processing begins.
 
+## Quick Start
+
+The repository contains the PDF extractor, claim extractor, schemas, prompts,
+validator, and master runner. A colleague needs this repository, a local PDF,
+Tesseract, Python, and Ollama.
+
+### 1. Clone and install
+
+These commands target Ubuntu/Debian or WSL and Python 3.11 or newer:
+
+```bash
+git clone git@github.com:Lodhi12/RNH-LLM-VS-HYPERGRAPH.git
+cd RNH-LLM-VS-HYPERGRAPH
+
+sudo apt update
+sudo apt install -y python3 python3-venv tesseract-ocr tesseract-ocr-eng
+
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -e '.[dev]'
+```
+
+This installs three commands:
+
+```text
+rnh-bookpipe   PDF -> pages, blocks, spans, structure, and image occurrences
+rnh-claims     extracted spans -> grounded claim candidates and review files
+rnh-pipeline   end-to-end orchestration of both stages
+```
+
+### 2. Install and start the local LLM
+
+Install Ollama using the [official download instructions](https://ollama.com/download),
+then start it in one terminal:
+
+```bash
+ollama serve
+```
+
+If Ollama is already running as a service, do not start a second server. In a
+second terminal, download the tested model once and confirm it is available:
+
+```bash
+ollama pull qwen3.5:4b
+ollama list
+```
+
+The model runs locally at `http://127.0.0.1:11434`; no API key is needed. The
+initial model download requires internet access, but inference does not send
+book text to an external API.
+
+### 3. Create a private run configuration
+
+Never add copyrighted PDFs or full extracted text to Git. Put the PDF anywhere
+locally, then create an ignored configuration:
+
+```bash
+cp configs/master_pipeline.example.json configs/my-book.local.json
+```
+
+Edit `configs/my-book.local.json` and set:
+
+- `project_id` to a unique experiment name;
+- `books[0].pdf` to the PDF's absolute path;
+- reviewed title, author, year, and language metadata;
+- `claims.output_dir` to a new run directory.
+
+Keep `limit_units_per_book` at `5` for the first pilot. Set it to `null` only
+after inspecting the pilot and when a complete-book run is intended.
+
+### 4. Plan, run, and resume
+
+```bash
+.venv/bin/rnh-pipeline plan configs/my-book.local.json
+.venv/bin/rnh-pipeline run configs/my-book.local.json
+.venv/bin/rnh-pipeline status configs/my-book.local.json
+```
+
+If a claim run is interrupted, repeat the same configuration with:
+
+```bash
+.venv/bin/rnh-pipeline run configs/my-book.local.json --resume
+```
+
+Do not change the model, prompt, source PDF, or extraction after a run has
+started. Use a new output directory for a changed experiment.
+
+### 5. Inspect the outputs
+
+By default, private extraction records appear under `data/private/books/` and
+claim runs under `data/private/claim_runs/`. The main review files are:
+
+```text
+claims.pretty.json               readable full claim records
+claims_review.csv                spreadsheet view of all retained candidates
+human_review_sample.csv          sample awaiting researcher annotation
+rejected_candidates_review.csv   candidates that failed deterministic checks
+unit_audit.csv                   model-input coverage and errors
+validation_report.json           schema, references, quotes, offsets, and hashes
+CLAIM_EXTRACTION_REPORT.md       concise run summary and limitations
+```
+
+Run the automated tests before opening a pull request:
+
+```bash
+.venv/bin/pytest -q
+```
+
+### Extraction-only command
+
+To extract and validate a PDF without invoking an LLM:
+
+```bash
+.venv/bin/rnh-bookpipe extract /absolute/path/to/book.pdf \
+  --output data/private/books \
+  --ocr auto \
+  --ocr-language eng
+```
+
+The command prints the generated book directory. `native` means selectable PDF
+characters were read directly; `ocr` means Tesseract recognized rendered page
+pixels. Image counts are embedded-image occurrences and require visual audit
+before being described as meaningful figures or photographs.
+
+## How the Local LLM Is Used
+
+The PDF itself is not sent directly to the model. The pipeline:
+
+1. reads claim-eligible paragraph spans from the validated extraction;
+2. groups consecutive spans into bounded, chapter-aware model units;
+3. combines the versioned instructions in `prompts/claim_extraction_v1.md`,
+   synthetic examples, book metadata, and source spans;
+4. sends that package to Ollama's local `/api/chat` endpoint;
+5. requests JSON constrained by `schemas/claim_candidate_response.schema.json`
+   with temperature `0`;
+6. rejects or flags records whose quotations, offsets, IDs, hashes, or
+   source-grounded field values cannot be reproduced in Python; and
+7. exports the surviving records for human review.
+
+The tested pilot used `qwen3.5:4b`, one worker, a 16,384-token context setting,
+few-shot examples, and `think: false`. The run manifest records the model name
+and local Ollama digest. A grounded candidate is traceable to the book; it is
+not automatically semantically approved or historically true.
+
 ## Contents
 
+- [Quick Start](#quick-start)
+- [How the Local LLM Is Used](#how-the-local-llm-is-used)
 - [Research Objective](#research-objective)
 - [Core Principles](#core-principles)
 - [Operational Definitions](#operational-definitions)
@@ -23,7 +169,10 @@ Research repository for building and evaluating reproducible pipelines that repr
 
 Detailed protocols:
 
+- [Master End-to-End Pipeline](docs/MASTER_PIPELINE.md)
 - [Canonical Data Schema Guide](docs/README.md)
+- [Claim Extraction Pipeline](docs/CLAIM_EXTRACTION_PIPELINE.md)
+- [Proposed Thesis Methodology](docs/THESIS_METHODOLOGY_PROPOSAL.md)
 - [Extraction Method and Evaluation Guide](docs/EXTRACTION_METHOD_GUIDE.md)
 - [Review of the Simplified Extraction and Claim Schemas](docs/SCHEMA_PROPOSAL_REVIEW.md)
 
@@ -493,9 +642,16 @@ The private status of a Git repository does not grant redistribution rights and 
 
 ## Current Status
 
-This repository is being re-established as the canonical research project. Previous experiments demonstrated native/OCR PDF extraction, page-level metadata, chapter mapping, rule-based candidates, structured LLM claim candidates, grounding checks, image audits, RAG preparation, and hypergraph exports across separate working repositories.
+The repository currently implements a bundled PyMuPDF/Tesseract extractor, an
+end-to-end master runner, structured local/OpenAI claim-provider adapters,
+schema validation, exact quotation and offset grounding, resumable runs, and
+human-review exports. Initial model runs are engineering pilots rather than
+thesis findings.
 
-Those artifacts should be treated as **prototypes and demonstrations** until they are migrated selectively, tested against the agreed schemas, and evaluated on a human-annotated benchmark. No existing claim count, confidence score, chapter assignment, frame label, or verification label should be reported as a thesis result solely because a script produced it.
+All generated claims remain **candidates** until evaluated on a human-annotated
+benchmark. No claim count, chapter assignment, frame label, or verification
+label should be reported as a thesis result solely because a script produced
+it.
 
 ## Research Roadmap
 
@@ -503,11 +659,11 @@ Those artifacts should be treated as **prototypes and demonstrations** until the
 - [ ] Approve operational definitions for extraction, claim, frame, grounding, and truth.
 - [ ] Write the annotation guide and adjudication procedure.
 - [ ] Finalize version `1.0.0` of the canonical schemas and data dictionary.
-- [ ] Add secure data handling, `.gitignore`, environment, and dependency setup.
-- [ ] Build the PDF diagnostic and layout-aware extraction baseline.
+- [x] Add secure data handling, `.gitignore`, environment, and dependency setup.
+- [x] Build the initial native/OCR PDF extraction and provenance baseline.
 - [ ] Construct and double-annotate a representative gold sample.
 - [ ] Benchmark native extraction and OCR/layout alternatives.
-- [ ] Implement rule, zero-shot, few-shot, and hybrid claim baselines.
+- [x] Implement zero-shot, few-shot, and rule-guided few-shot claim-run conditions.
 - [ ] Validate grounding deterministically and semantic fidelity against humans.
 - [ ] Build RAG and hypergraph exports from identical canonical records.
 - [ ] Define shared comparison tasks and evaluate both representations.

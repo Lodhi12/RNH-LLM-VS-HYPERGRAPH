@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/historical-book-image-occurrence-v2.schema.json",
+  "title": "Historical Book Image Occurrence v2",
+  "oneOf": [
+    {"$ref": "#/$defs/extracted"},
+    {"$ref": "#/$defs/failed"}
+  ],
+  "$defs": {
+    "common": {
+      "type": "object",
+      "required": ["schema", "book_id", "page_id", "page_number", "image_index", "pdf_xref", "status"],
+      "properties": {
+        "schema": {"const": "historical-book-image-occurrence-v2"},
+        "book_id": {"type": "string"},
+        "page_id": {"type": "string"},
+        "page_number": {"type": "integer", "minimum": 1},
+        "image_index": {"type": "integer", "minimum": 1},
+        "pdf_xref": {"type": "integer", "minimum": 1}
+      }
+    },
+    "extracted": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema", "image_id", "book_id", "page_id", "page_number", "image_index",
+            "pdf_xref", "status", "file_path", "sha256", "bytes", "format", "width",
+            "height", "caption", "caption_status"
+          ],
+          "properties": {
+            "schema": {"const": "historical-book-image-occurrence-v2"},
+            "image_id": {"type": "string"},
+            "book_id": {"type": "string"},
+            "page_id": {"type": "string"},
+            "page_number": {"type": "integer", "minimum": 1},
+            "image_index": {"type": "integer", "minimum": 1},
+            "pdf_xref": {"type": "integer", "minimum": 1},
+            "status": {"const": "extracted"},
+            "file_path": {"type": "string"},
+            "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "bytes": {"type": "integer", "minimum": 1},
+            "format": {"type": "string", "minLength": 1},
+            "width": {"type": "integer", "minimum": 0},
+            "height": {"type": "integer", "minimum": 0},
+            "caption": {"type": ["string", "null"]},
+            "caption_status": {"type": "string"}
+          }
+        }
+      ]
+    },
+    "failed": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schema", "book_id", "page_id", "page_number", "image_index", "pdf_xref", "status", "error"],
+          "properties": {
+            "schema": {"const": "historical-book-image-occurrence-v2"},
+            "book_id": {"type": "string"},
+            "page_id": {"type": "string"},
+            "page_number": {"type": "integer", "minimum": 1},
+            "image_index": {"type": "integer", "minimum": 1},
+            "pdf_xref": {"type": "integer", "minimum": 1},
+            "status": {"const": "extraction_failed"},
+            "error": {"type": "string"}
+          }
+        }
+      ]
+    }
+  }
+}

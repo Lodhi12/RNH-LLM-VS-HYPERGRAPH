@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/historical-book-source-span-v2.schema.json",
+  "title": "Historical Book Source Span v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "book_id", "page_id", "page_number", "page_label", "section", "extraction_method", "offset_basis", "claim_eligible", "span_id", "span_type", "parent_span_id", "paragraph_index", "sentence_index", "page_char_start", "page_char_end", "word_count", "char_count", "text", "text_sha256"],
+  "properties": {
+    "schema": {"const": "historical-book-source-span-v2"},
+    "book_id": {"type": "string"},
+    "page_id": {"type": "string"},
+    "page_number": {"type": "integer", "minimum": 1},
+    "page_label": {"type": ["string", "null"]},
+    "section": {"type": "object"},
+    "extraction_method": {"type": "string"},
+    "offset_basis": {"const": "pages.text.normalized"},
+    "claim_eligible": {"type": "boolean"},
+    "span_id": {"type": "string"},
+    "span_type": {"enum": ["paragraph", "sentence"]},
+    "parent_span_id": {"type": ["string", "null"]},
+    "paragraph_index": {"type": "integer", "minimum": 1},
+    "sentence_index": {"type": ["integer", "null"], "minimum": 1},
+    "page_char_start": {"type": "integer", "minimum": 0},
+    "page_char_end": {"type": "integer", "minimum": 1},
+    "word_count": {"type": "integer", "minimum": 1},
+    "char_count": {"type": "integer", "minimum": 1},
+    "text": {"type": "string", "minLength": 1},
+    "text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

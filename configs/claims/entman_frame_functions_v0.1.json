@@ -1,0 +1,20 @@
+{
+  "codebook_name": "entman_frame_functions",
+  "version": "0.1.0",
+  "status": "provisional_requires_supervisor_approval",
+  "scope": "How a source passage frames an issue, not which historical account is true.",
+  "multi_label": true,
+  "allow_no_frame": true,
+  "labels": {
+    "problem_definition": "Defines a condition, actor, event, or outcome as the relevant problem.",
+    "causal_interpretation": "Attributes a cause, responsibility, or mechanism to an event or condition.",
+    "moral_evaluation": "Expresses or reports praise, blame, legitimacy, injustice, duty, or another normative judgment.",
+    "treatment_recommendation": "Advocates, rejects, or evaluates a remedy, response, policy, or course of action."
+  },
+  "rules": [
+    "Do not force a frame when no framing function is explicitly supported.",
+    "Every frame candidate requires an exact cue quotation.",
+    "Topic labels such as military or humanitarian are not frames.",
+    "Model assignments remain candidates until human review."
+  ]
+}

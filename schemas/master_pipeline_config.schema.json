@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rnh.example/schemas/master-pipeline-config/1.0.0",
+  "title": "RNH master pipeline configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "workspace_root",
+    "data_handling",
+    "extractor",
+    "books",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "project_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "workspace_root": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Absolute path or path relative to this configuration file. All other relative paths resolve beneath it."
+    },
+    "data_handling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["external_api_allowed", "redistribution_allowed"],
+      "properties": {
+        "external_api_allowed": {
+          "type": "boolean",
+          "description": "Explicit approval to send source passages to a remote model provider."
+        },
+        "redistribution_allowed": {
+          "type": "boolean",
+          "description": "Rights note only; the pipeline never publishes source PDFs automatically."
+        }
+      }
+    },
+    "extractor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "output_root",
+        "ocr_mode",
+        "ocr_language",
+        "ocr_dpi",
+        "min_text_chars",
+        "include_blocks",
+        "include_images",
+        "min_image_bytes"
+      ],
+      "properties": {
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Command prefix used to invoke bookpipe, for example [\"/path/to/python\", \"-m\", \"book_pipeline.cli\"]."
+        },
+        "output_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ocr_mode": {
+          "enum": ["auto", "on", "off"]
+        },
+        "ocr_language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ocr_dpi": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 600
+        },
+        "min_text_chars": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "include_blocks": {
+          "type": "boolean"
+        },
+        "include_images": {
+          "type": "boolean"
+        },
+        "min_image_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "books": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pdf": {
+            "type": "string",
+            "minLength": 1
+          },
+          "book_dir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "author": {
+            "type": "string",
+            "minLength": 1
+          },
+          "publication_year": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3000
+          },
+          "language": {
+            "type": "string",
+            "minLength": 2
+          },
+          "rights_status": {
+            "enum": ["private_research", "licensed", "public_domain", "unknown"]
+          }
+        },
+        "allOf": [
+          {
+            "oneOf": [
+              {"required": ["pdf"]},
+              {"required": ["book_dir"]}
+            ]
+          }
+        ]
+      }
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_dir",
+        "backend",
+        "model",
+        "condition",
+        "base_url",
+        "timeout_seconds",
+        "context_length",
+        "max_retries",
+        "workers",
+        "sample_size_per_book"
+      ],
+      "properties": {
+        "output_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "backend": {
+          "enum": ["ollama", "openai"]
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "condition": {
+          "enum": ["llm_zero_shot", "llm_few_shot", "hybrid_rule_guided_few_shot"]
+        },
+        "base_url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timeout_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "context_length": {
+          "type": "integer",
+          "minimum": 1024
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "workers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "sample_size_per_book": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "limit_units_per_book": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "description": "Use only for a pilot. Production corpus runs should set null."
+        }
+      }
+    }
+  }
+}

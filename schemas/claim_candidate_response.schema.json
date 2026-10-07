@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rnh.example/schemas/claim-candidate-response/1.0.0",
+  "title": "RNH LLM claim candidate response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["claims", "unit_complete", "warnings"],
+  "properties": {
+    "claims": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/claimCandidate"}
+    },
+    "unit_complete": {
+      "type": "boolean",
+      "description": "False when the model believes the output limit prevented complete extraction."
+    },
+    "warnings": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  },
+  "$defs": {
+    "claimCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_text",
+        "claim_kind",
+        "polarity",
+        "epistemic_status",
+        "epistemic_cue",
+        "attribution_chain",
+        "predicate",
+        "participants",
+        "times",
+        "locations",
+        "quantities",
+        "topic_labels",
+        "evidence",
+        "frame_candidates"
+      ],
+      "properties": {
+        "claim_text": {"type": "string", "minLength": 1},
+        "claim_kind": {
+          "enum": ["event", "state", "causal", "comparative", "interpretive", "quantitative", "other"]
+        },
+        "polarity": {"enum": ["affirmed", "negated", "mixed"]},
+        "epistemic_status": {
+          "enum": ["asserted", "reported", "remembered", "inferred", "disputed", "uncertain"]
+        },
+        "epistemic_cue": {"type": ["string", "null"]},
+        "attribution_chain": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/attribution"}
+        },
+        "predicate": {"$ref": "#/$defs/predicate"},
+        "participants": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/participant"}
+        },
+        "times": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/time"}
+        },
+        "locations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/location"}
+        },
+        "quantities": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/quantity"}
+        },
+        "topic_labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "political", "military", "diplomatic", "social", "economic",
+              "humanitarian", "legal", "cultural", "personal_memory", "other"
+            ]
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {"$ref": "#/$defs/evidenceCandidate"}
+        },
+        "frame_candidates": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/frameCandidate"}
+        }
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["speaker", "speaker_role", "cue", "basis"],
+      "properties": {
+        "speaker": {"type": ["string", "null"]},
+        "speaker_role": {
+          "enum": ["author", "narrator", "interviewee", "witness", "official", "organization", "document", "unknown", "other"]
+        },
+        "cue": {"type": ["string", "null"]},
+        "basis": {"enum": ["book_metadata", "target_text", "context_text", "unknown"]}
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface_form", "normalized_relation"],
+      "properties": {
+        "surface_form": {"type": ["string", "null"]},
+        "normalized_relation": {"type": ["string", "null"]}
+      }
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "entity_type", "semantic_role"],
+      "properties": {
+        "mention": {"type": "string", "minLength": 1},
+        "entity_type": {
+          "enum": ["person", "group", "organization", "state", "military_unit", "place", "document", "event", "other", "unknown"]
+        },
+        "semantic_role": {
+          "enum": ["agent", "patient", "theme", "experiencer", "beneficiary", "recipient", "instrument", "origin", "destination", "comparator", "other"]
+        }
+      }
+    },
+    "time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "normalized", "certainty"],
+      "properties": {
+        "mention": {"type": "string", "minLength": 1},
+        "normalized": {"type": ["string", "null"]},
+        "certainty": {"enum": ["exact", "approximate", "uncertain"]}
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "normalized_name"],
+      "properties": {
+        "mention": {"type": "string", "minLength": 1},
+        "normalized_name": {"type": ["string", "null"]}
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "normalized_value", "unit", "approximate"],
+      "properties": {
+        "mention": {"type": "string", "minLength": 1},
+        "normalized_value": {"type": ["number", "null"]},
+        "unit": {"type": ["string", "null"]},
+        "approximate": {"type": "boolean"}
+      }
+    },
+    "evidenceCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["span_id", "quote", "support_type"],
+      "properties": {
+        "span_id": {"type": "string", "minLength": 1},
+        "quote": {"type": "string", "minLength": 1},
+        "support_type": {"enum": ["primary", "supporting"]}
+      }
+    },
+    "frameCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["function", "label", "target", "cue_quote"],
+      "properties": {
+        "function": {
+          "enum": ["problem_definition", "causal_interpretation", "moral_evaluation", "treatment_recommendation"]
+        },
+        "label": {"type": "string", "minLength": 1},
+        "target": {"type": ["string", "null"]},
+        "cue_quote": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

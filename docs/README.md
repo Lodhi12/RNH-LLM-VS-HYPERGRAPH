@@ -1,5 +1,8 @@
 # RNH Data Schema Guide
 
+For the complete executable workflow, production prompt, validation gates, and
+human-evaluation protocol, see the [Master End-to-End Pipeline](MASTER_PIPELINE.md).
+
 This directory documents the canonical data format for the RNH historical-narrative research project. The format is designed to support source-faithful book extraction, claim extraction, human review, LLM/RAG experiments, and hypergraph construction from the same underlying records.
 
 > **Status:** proposed core schema v1.0.0. The team and supervisor must approve the definitions and annotation rules before this becomes a frozen thesis protocol. The JSON examples in this document describe the logical data model; machine-enforced JSON Schema files still need to be implemented under `schemas/`.
@@ -784,6 +787,8 @@ Before schema v1.0.0 is frozen:
 
 ## Related Documents
 
+- [Claim Extraction Pipeline](CLAIM_EXTRACTION_PIPELINE.md)
+- [Proposed Thesis Methodology](THESIS_METHODOLOGY_PROPOSAL.md)
 - [Extraction Method and Evaluation Guide](EXTRACTION_METHOD_GUIDE.md)
 - [Review of the Simplified Extraction and Claim Schemas](SCHEMA_PROPOSAL_REVIEW.md)
 - [Main research README](../README.md)

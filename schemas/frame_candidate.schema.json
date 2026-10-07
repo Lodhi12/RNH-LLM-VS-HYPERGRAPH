@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rnh.example/schemas/frame-candidate/0.1.0",
+  "title": "RNH provisional narrative frame candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "record_type", "frame_id", "claim_id", "book_id",
+    "function", "label", "target", "cue_quote", "evidence_id",
+    "codebook", "assignment", "verification", "review"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "record_type": {"const": "frame_candidate"},
+    "frame_id": {"type": "string", "pattern": "^frame:"},
+    "claim_id": {"type": "string", "pattern": "^claim:"},
+    "book_id": {"type": "string"},
+    "function": {"enum": ["problem_definition", "causal_interpretation", "moral_evaluation", "treatment_recommendation"]},
+    "label": {"type": "string", "minLength": 1},
+    "target": {"type": ["string", "null"]},
+    "cue_quote": {"type": "string", "minLength": 1},
+    "evidence_id": {"type": ["string", "null"]},
+    "codebook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "status"],
+      "properties": {
+        "name": {"const": "entman_frame_functions"},
+        "version": {"const": "0.1.0"},
+        "status": {"const": "provisional_requires_supervisor_approval"}
+      }
+    },
+    "assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "run_id"],
+      "properties": {
+        "method": {"enum": ["llm_candidate", "human"]},
+        "run_id": {"type": "string"}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cue_grounded", "issues"],
+      "properties": {
+        "cue_grounded": {"type": "boolean"},
+        "issues": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reviewer_id", "reviewed_at", "note"],
+      "properties": {
+        "status": {"enum": ["pending", "accepted", "needs_revision", "rejected"]},
+        "reviewer_id": {"type": ["string", "null"]},
+        "reviewed_at": {"type": ["string", "null"], "format": "date-time"},
+        "note": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

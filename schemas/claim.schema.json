@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rnh.example/schemas/claim/1.0.0",
+  "title": "RNH source-grounded claim",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "record_type", "claim_id", "candidate_id", "book_id",
+    "claim_text", "claim_kind", "polarity", "epistemic_status", "epistemic_cue",
+    "attribution_chain", "predicate", "participants", "times", "locations",
+    "quantities", "topic_labels", "evidence", "frame_candidate_ids",
+    "source_context", "extraction", "verification", "review"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "record_type": {"const": "claim"},
+    "claim_id": {"type": "string", "pattern": "^claim:"},
+    "candidate_id": {"type": "string", "pattern": "^candidate:"},
+    "book_id": {"type": "string", "minLength": 1},
+    "claim_text": {"type": "string", "minLength": 1},
+    "claim_kind": {"enum": ["event", "state", "causal", "comparative", "interpretive", "quantitative", "other"]},
+    "polarity": {"enum": ["affirmed", "negated", "mixed"]},
+    "epistemic_status": {"enum": ["asserted", "reported", "remembered", "inferred", "disputed", "uncertain"]},
+    "epistemic_cue": {"type": ["string", "null"]},
+    "attribution_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["speaker", "speaker_role", "cue", "basis"],
+        "properties": {
+          "speaker": {"type": ["string", "null"]},
+          "speaker_role": {"enum": ["author", "narrator", "interviewee", "witness", "official", "organization", "document", "unknown", "other"]},
+          "cue": {"type": ["string", "null"]},
+          "basis": {"enum": ["book_metadata", "target_text", "context_text", "unknown"]}
+        }
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface_form", "normalized_relation", "grounding"],
+      "properties": {
+        "surface_form": {"type": ["string", "null"]},
+        "normalized_relation": {"type": ["string", "null"]},
+        "grounding": {"$ref": "#/$defs/groundingOrNull"}
+      }
+    },
+    "participants": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/participant"}
+    },
+    "times": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/time"}
+    },
+    "locations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/location"}
+    },
+    "quantities": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/quantity"}
+    },
+    "topic_labels": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["political", "military", "diplomatic", "social", "economic", "humanitarian", "legal", "cultural", "personal_memory", "other"]}
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "frame_candidate_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^frame:"}
+    },
+    "source_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary_span_id", "page_id", "pdf_page_number", "printed_page_label", "part_title", "chapter_title", "section_title", "extraction_method"],
+      "properties": {
+        "primary_span_id": {"type": "string"},
+        "page_id": {"type": "string"},
+        "pdf_page_number": {"type": "integer", "minimum": 1},
+        "printed_page_label": {"type": ["string", "null"]},
+        "part_title": {"type": ["string", "null"]},
+        "chapter_title": {"type": ["string", "null"]},
+        "section_title": {"type": ["string", "null"]},
+        "extraction_method": {"type": ["string", "null"]}
+      }
+    },
+    "extraction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["condition", "backend", "model", "prompt_version", "run_id", "unit_id", "pass_index", "generated_at"],
+      "properties": {
+        "condition": {"enum": ["rule_based", "llm_zero_shot", "llm_few_shot", "hybrid_rule_guided_few_shot", "human"]},
+        "backend": {"enum": ["rules", "openai", "ollama", "human"]},
+        "model": {"type": ["string", "null"]},
+        "prompt_version": {"type": ["string", "null"]},
+        "run_id": {"type": "string"},
+        "unit_id": {"type": "string"},
+        "pass_index": {"type": "integer", "minimum": 1},
+        "generated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_valid", "evidence_grounding", "field_grounding", "exact_quote_match", "exact_offset_match", "source_fidelity", "historical_truth", "issues"],
+      "properties": {
+        "schema_valid": {"type": "boolean"},
+        "evidence_grounding": {"enum": ["passed", "failed"]},
+        "field_grounding": {"enum": ["passed", "needs_review"]},
+        "exact_quote_match": {"type": "boolean"},
+        "exact_offset_match": {"type": "boolean"},
+        "source_fidelity": {"enum": ["pending", "faithful", "partially_faithful", "not_faithful"]},
+        "historical_truth": {"const": "not_assessed"},
+        "issues": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "flags", "reviewer_id", "reviewed_at", "guideline_version", "note"],
+      "properties": {
+        "status": {"enum": ["pending", "accepted", "needs_revision", "rejected"]},
+        "flags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "not_a_claim", "not_atomic", "unsupported_claim", "quote_not_exact",
+              "quote_boundary_unclear", "wrong_attribution", "unresolved_pronoun",
+              "participant_role_uncertain", "negation_or_modality_lost",
+              "time_unparseable", "location_ambiguous", "frame_uncertain",
+              "possible_duplicate", "ocr_suspected", "chapter_uncertain", "other"
+            ]
+          }
+        },
+        "reviewer_id": {"type": ["string", "null"]},
+        "reviewed_at": {"type": ["string", "null"], "format": "date-time"},
+        "guideline_version": {"type": ["string", "null"]},
+        "note": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "$defs": {
+    "grounding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "quote_char_start", "quote_char_end", "match_count"],
+      "properties": {
+        "evidence_id": {"type": "string"},
+        "quote_char_start": {"type": "integer", "minimum": 0},
+        "quote_char_end": {"type": "integer", "minimum": 1},
+        "match_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "groundingOrNull": {
+      "anyOf": [{"$ref": "#/$defs/grounding"}, {"type": "null"}]
+    },
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention_id", "mention", "entity_type", "semantic_role", "entity_id", "grounding"],
+      "properties": {
+        "mention_id": {"type": "string", "pattern": "^mention:"},
+        "mention": {"type": "string", "minLength": 1},
+        "entity_type": {"enum": ["person", "group", "organization", "state", "military_unit", "place", "document", "event", "other", "unknown"]},
+        "semantic_role": {"enum": ["agent", "patient", "theme", "experiencer", "beneficiary", "recipient", "instrument", "origin", "destination", "comparator", "other"]},
+        "entity_id": {"type": ["string", "null"]},
+        "grounding": {"$ref": "#/$defs/groundingOrNull"}
+      }
+    },
+    "time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "normalized", "certainty", "grounding"],
+      "properties": {
+        "mention": {"type": "string"},
+        "normalized": {"type": ["string", "null"]},
+        "certainty": {"enum": ["exact", "approximate", "uncertain"]},
+        "grounding": {"$ref": "#/$defs/groundingOrNull"}
+      }
+    },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "normalized_name", "entity_id", "grounding"],
+      "properties": {
+        "mention": {"type": "string"},
+        "normalized_name": {"type": ["string", "null"]},
+        "entity_id": {"type": ["string", "null"]},
+        "grounding": {"$ref": "#/$defs/groundingOrNull"}
+      }
+    },
+    "quantity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mention", "normalized_value", "unit", "approximate", "grounding"],
+      "properties": {
+        "mention": {"type": "string"},
+        "normalized_value": {"type": ["number", "null"]},
+        "unit": {"type": ["string", "null"]},
+        "approximate": {"type": "boolean"},
+        "grounding": {"$ref": "#/$defs/groundingOrNull"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "span_id", "page_id", "support_type", "quote", "quote_sha256", "submitted_quote", "alignment_method", "span_char_start", "span_char_end", "page_char_start", "page_char_end", "offset_basis"],
+      "properties": {
+        "evidence_id": {"type": "string", "pattern": "^evidence:"},
+        "span_id": {"type": "string"},
+        "page_id": {"type": "string"},
+        "support_type": {"enum": ["primary", "supporting"]},
+        "quote": {"type": "string", "minLength": 1},
+        "quote_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "submitted_quote": {"type": "string", "minLength": 1},
+        "alignment_method": {"enum": ["exact", "whitespace_normalized", "source_normalized"]},
+        "span_char_start": {"type": "integer", "minimum": 0},
+        "span_char_end": {"type": "integer", "minimum": 1},
+        "page_char_start": {"type": "integer", "minimum": 0},
+        "page_char_end": {"type": "integer", "minimum": 1},
+        "offset_basis": {"const": "page_normalized_text"}
+      }
+    }
+  }
+}

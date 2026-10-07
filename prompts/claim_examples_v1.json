@@ -1,0 +1,169 @@
+[
+  {
+    "name": "direct_author_event",
+    "book": {"title": "Synthetic History", "authors": ["Example Author"]},
+    "target_spans": [
+      {
+        "span_id": "span:example:0001",
+        "text": "The commission announced the agreement in Dhaka on 15 March 1971."
+      }
+    ],
+    "response": {
+      "claims": [
+        {
+          "claim_text": "The commission announced the agreement in Dhaka on 15 March 1971.",
+          "claim_kind": "event",
+          "polarity": "affirmed",
+          "epistemic_status": "asserted",
+          "epistemic_cue": null,
+          "attribution_chain": [
+            {"speaker": "Example Author", "speaker_role": "author", "cue": null, "basis": "book_metadata"}
+          ],
+          "predicate": {"surface_form": "announced", "normalized_relation": "announce"},
+          "participants": [
+            {"mention": "The commission", "entity_type": "organization", "semantic_role": "agent"},
+            {"mention": "the agreement", "entity_type": "other", "semantic_role": "theme"}
+          ],
+          "times": [
+            {"mention": "15 March 1971", "normalized": "1971-03-15", "certainty": "exact"}
+          ],
+          "locations": [
+            {"mention": "Dhaka", "normalized_name": "Dhaka"}
+          ],
+          "quantities": [],
+          "topic_labels": ["political", "diplomatic"],
+          "evidence": [
+            {"span_id": "span:example:0001", "quote": "The commission announced the agreement in Dhaka on 15 March 1971.", "support_type": "primary"}
+          ],
+          "frame_candidates": []
+        }
+      ],
+      "unit_complete": true,
+      "warnings": []
+    }
+  },
+  {
+    "name": "nested_memory_and_causality",
+    "book": {"title": "Synthetic Memories", "authors": ["Example Author"]},
+    "target_spans": [
+      {
+        "span_id": "span:example:0002",
+        "text": "Rahman recalled, \"We left the village in early April because the shelling had begun.\""
+      }
+    ],
+    "response": {
+      "claims": [
+        {
+          "claim_text": "Rahman remembered that the shelling caused his group to leave the village in early April.",
+          "claim_kind": "causal",
+          "polarity": "affirmed",
+          "epistemic_status": "remembered",
+          "epistemic_cue": "recalled",
+          "attribution_chain": [
+            {"speaker": "Example Author", "speaker_role": "author", "cue": null, "basis": "book_metadata"},
+            {"speaker": "Rahman", "speaker_role": "witness", "cue": "recalled", "basis": "target_text"}
+          ],
+          "predicate": {"surface_form": "because", "normalized_relation": "caused"},
+          "participants": [
+            {"mention": "We", "entity_type": "group", "semantic_role": "agent"},
+            {"mention": "the shelling", "entity_type": "event", "semantic_role": "other"},
+            {"mention": "the village", "entity_type": "place", "semantic_role": "origin"}
+          ],
+          "times": [
+            {"mention": "early April", "normalized": null, "certainty": "approximate"}
+          ],
+          "locations": [
+            {"mention": "the village", "normalized_name": null}
+          ],
+          "quantities": [],
+          "topic_labels": ["military", "personal_memory"],
+          "evidence": [
+            {"span_id": "span:example:0002", "quote": "Rahman recalled, \"We left the village in early April because the shelling had begun.\"", "support_type": "primary"}
+          ],
+          "frame_candidates": [
+            {"function": "causal_interpretation", "label": "shelling caused displacement", "target": "We left the village", "cue_quote": "because the shelling had begun"}
+          ]
+        }
+      ],
+      "unit_complete": true,
+      "warnings": []
+    }
+  },
+  {
+    "name": "reported_negation_and_dispute",
+    "book": {"title": "Synthetic Report", "authors": ["Example Author"]},
+    "target_spans": [
+      {
+        "span_id": "span:example:0003",
+        "text": "The report stated that the army did not enter the town that night, although two witnesses disputed this account."
+      }
+    ],
+    "response": {
+      "claims": [
+        {
+          "claim_text": "The report stated that the army did not enter the town that night.",
+          "claim_kind": "event",
+          "polarity": "negated",
+          "epistemic_status": "reported",
+          "epistemic_cue": "stated",
+          "attribution_chain": [
+            {"speaker": "Example Author", "speaker_role": "author", "cue": null, "basis": "book_metadata"},
+            {"speaker": "The report", "speaker_role": "document", "cue": "stated", "basis": "target_text"}
+          ],
+          "predicate": {"surface_form": "did not enter", "normalized_relation": "enter"},
+          "participants": [
+            {"mention": "the army", "entity_type": "military_unit", "semantic_role": "agent"},
+            {"mention": "the town", "entity_type": "place", "semantic_role": "destination"}
+          ],
+          "times": [
+            {"mention": "that night", "normalized": null, "certainty": "uncertain"}
+          ],
+          "locations": [
+            {"mention": "the town", "normalized_name": null}
+          ],
+          "quantities": [],
+          "topic_labels": ["military"],
+          "evidence": [
+            {"span_id": "span:example:0003", "quote": "The report stated that the army did not enter the town that night", "support_type": "primary"}
+          ],
+          "frame_candidates": []
+        },
+        {
+          "claim_text": "Two witnesses disputed the report's account.",
+          "claim_kind": "event",
+          "polarity": "affirmed",
+          "epistemic_status": "asserted",
+          "epistemic_cue": null,
+          "attribution_chain": [
+            {"speaker": "Example Author", "speaker_role": "author", "cue": null, "basis": "book_metadata"}
+          ],
+          "predicate": {"surface_form": "disputed", "normalized_relation": "dispute"},
+          "participants": [
+            {"mention": "two witnesses", "entity_type": "group", "semantic_role": "agent"},
+            {"mention": "this account", "entity_type": "document", "semantic_role": "theme"}
+          ],
+          "times": [],
+          "locations": [],
+          "quantities": [
+            {"mention": "two", "normalized_value": 2, "unit": "witnesses", "approximate": false}
+          ],
+          "topic_labels": ["military"],
+          "evidence": [
+            {"span_id": "span:example:0003", "quote": "two witnesses disputed this account", "support_type": "primary"}
+          ],
+          "frame_candidates": []
+        }
+      ],
+      "unit_complete": true,
+      "warnings": []
+    }
+  },
+  {
+    "name": "non_claim",
+    "book": {"title": "Synthetic History", "authors": ["Example Author"]},
+    "target_spans": [
+      {"span_id": "span:example:0004", "text": "CHAPTER FOUR\nNotes and References"}
+    ],
+    "response": {"claims": [], "unit_complete": true, "warnings": []}
+  }
+]

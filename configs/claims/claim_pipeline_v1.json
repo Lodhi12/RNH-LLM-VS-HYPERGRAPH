@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "prompt_version": "claim-extraction-1.0.1",
+  "annotation_guideline_version": "claim-annotation-1.0.0-draft",
+  "default_condition": "llm_few_shot",
+  "target_span_type": "paragraph",
+  "max_target_characters": 3000,
+  "max_target_spans": 5,
+  "context_spans_before": 0,
+  "context_spans_after": 0,
+  "max_claims_per_unit": 20,
+  "passes": 1,
+  "temperature": 0,
+  "historical_truth_policy": "not_assessed",
+  "frame_policy": "provisional_candidates_separate_from_claims"
+}

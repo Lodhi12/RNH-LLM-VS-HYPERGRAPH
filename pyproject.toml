@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rnh-research-pipeline"
+version = "0.1.0"
+description = "Source-grounded historical claim extraction for the RNH thesis"
+requires-python = ">=3.11"
+dependencies = [
+  "jsonschema>=4.23,<5",
+  "PyMuPDF>=1.26,<2",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=2,<3"]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+rnh-bookpipe = "rnh.extraction.cli:main"
+rnh-claims = "rnh.claims.cli:main"
+rnh-pipeline = "rnh.master:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
