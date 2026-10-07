@@ -5,6 +5,7 @@ import pymupdf
 from rnh.extraction.extraction import ExtractionConfig, extract_pdf
 from rnh.extraction.io_utils import read_json, read_jsonl
 from rnh.extraction.schema_validation import validate_book
+from rnh.extraction.structure import context_for_page
 from rnh.extraction.verification import verify_extraction
 
 
@@ -47,3 +48,11 @@ def test_bundled_extractor_produces_traceable_valid_records(tmp_path: Path) -> N
         == span["text"]
         for span in spans
     )
+
+
+def test_document_without_toc_remains_claim_eligible() -> None:
+    section = context_for_page(1, [])
+
+    assert section["section_id"] == "section:unstructured-body"
+    assert section["section_kind"] == "body_unstructured"
+    assert section["claim_eligible"] is True

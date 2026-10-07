@@ -221,8 +221,11 @@ bibliography, notes, acknowledgements, promotional pages, title pages, and
 dedications as non-content. Ordinary body chapters and appendices remain claim
 eligible.
 
-This is a deterministic baseline. If a PDF has missing or incorrect bookmarks,
-its inferred chapter mapping needs human correction.
+This is a deterministic baseline. If a PDF has no usable bookmarks, every page
+is retained under one claim-eligible `Unstructured Body` section so substantive
+text is not silently discarded. Such a book still needs human or later layout
+review to recover trustworthy chapter boundaries. Incorrect bookmarks likewise
+require human correction.
 
 ### `src/rnh/extraction/io_utils.py`
 

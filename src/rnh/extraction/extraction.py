@@ -104,8 +104,10 @@ def ocr_page(
                 str(tessdata_dir),
                 "--psm",
                 "3",
-                "txt",
-                "tsv",
+                "-c",
+                "tessedit_create_txt=1",
+                "-c",
+                "tessedit_create_tsv=1",
             ],
             check=False,
             capture_output=True,
@@ -449,13 +451,22 @@ def extract_pdf(
     write_jsonl(book_dir / "extraction" / "spans.jsonl", spans)
     write_jsonl(book_dir / "extraction" / "blocks.jsonl", blocks)
     write_jsonl(book_dir / "media" / "images.jsonl", images)
+    structure_method = "pdf_bookmarks" if toc else "fallback_unstructured_body"
+    structure_limitations = (
+        "PDF bookmarks may be missing or inaccurate and require sampled human review."
+        if toc
+        else (
+            "The PDF has no usable bookmarks. All pages are retained as one claim-eligible "
+            "unstructured body; chapter boundaries require human or later layout review."
+        )
+    )
     write_json(
         book_dir / "extraction" / "structure.json",
         {
             "schema": "historical-book-structure-v2",
             "book_id": book_id,
-            "method": "pdf_bookmarks",
-            "method_limitations": "PDF bookmarks may be missing or inaccurate and require sampled human review.",
+            "method": structure_method,
+            "method_limitations": structure_limitations,
             "toc": toc,
             "sections": sections,
         },
@@ -481,7 +492,11 @@ def extract_pdf(
         "unique_image_count": len(known_images),
         "skipped_small_image_count": skipped_images,
         "extraction_errors": extraction_errors,
-        "status": "pass" if len(pages) == doc.page_count and not span_offset_errors else "needs_review",
+        "status": (
+            "pass"
+            if len(pages) == doc.page_count and not span_offset_errors and not extraction_errors
+            else "needs_review"
+        ),
     }
     write_json(book_dir / "reports" / "extraction_summary.json", report)
 

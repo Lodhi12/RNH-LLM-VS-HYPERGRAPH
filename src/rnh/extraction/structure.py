@@ -71,6 +71,19 @@ def normalize_toc(raw_toc: list[list[Any]] | list[dict[str, Any]], page_count: i
 
 
 def context_for_page(page_number: int, toc: list[dict[str, Any]]) -> dict[str, Any]:
+    if not toc:
+        title = "Unstructured Body"
+        return {
+            "section_id": "section:unstructured-body",
+            "section_title": title,
+            "section_level": 0,
+            "section_path": [title],
+            "part_title": None,
+            "chapter_title": title,
+            "section_kind": "body_unstructured",
+            "claim_eligible": True,
+        }
+
     active = [row for row in toc if row["page_start"] <= page_number]
     if not active:
         title = "Front Matter"
